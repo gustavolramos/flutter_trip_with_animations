@@ -10,14 +10,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   
   int _selectedIndex = 0;
+  late AnimationController _animationController;
   final List<String> _photoList = [
     'assets/photo_barcelona.jpg',
     'assets/photo_kotor.jpg',
     'assets/photo_netherlands.jpg',
     'assets/photo_slovenia.jpg',
   ];
-  late AnimationController _animationController;
-  late Animation<double> _animation;
 
   @override
   void initState() {
@@ -25,10 +24,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _animationController = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    );
-    _animation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
     );
   }
 
@@ -51,25 +46,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(title: const Text('My Photobook'), centerTitle: true, backgroundColor: Colors.blueAccent,),
       body: Center(
-        child: Container(
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            child: Image.asset(
-              _photoList[_selectedIndex],
-              key: ValueKey<int>(_selectedIndex),
-              height: 400,
-              width: 400,
-            ),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(1, 0),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              );
-            },
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 500),
+          child: Image.asset(
+            _photoList[_selectedIndex],
+            key: ValueKey<int>(_selectedIndex),
+            height: 400,
+            width: 400,
           ),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(1, 0),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            );
+          },
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
